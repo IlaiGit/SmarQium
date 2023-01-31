@@ -5,11 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * Adding and aquarium and attach it to user
+ */
+
 public class AddAquarium extends AppCompatActivity {
+
+    /**
+     * xml variables definition
+     */
     EditText nickname;
     EditText amount;
     EditText width;
@@ -24,6 +33,10 @@ public class AddAquarium extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_aquarium);
 
+        /**
+         * connecting xml components to java variables
+         */
+
         nickname = (EditText) findViewById(R.id.nickname);
         amount = (EditText) findViewById(R.id.amount);
         width = (EditText) findViewById(R.id.width);
@@ -33,6 +46,11 @@ public class AddAquarium extends AppCompatActivity {
     }
 
     public void ConnectAndCreate(View view) {
+
+        /**
+         * check for errors
+         */
+
         if(nickname.getText().toString().isEmpty()){
             nickname.setError("Please enter a nickname");
             nickname.requestFocus();
@@ -66,12 +84,33 @@ public class AddAquarium extends AppCompatActivity {
         String DEPTH = depth.getText().toString();
 
 
+        /**
+         * Upload data to firebase
+         */
         Aquarium aqq =  new Aquarium(NICKNAME, AMOUNT, WIDTH, HEIGHT, DEPTH);
 
         FirebaseDatabase.getInstance().getReference("Aquariums")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(aqq);
 
+        Toast.makeText(this, "your aquarium was created!", Toast.LENGTH_SHORT).show();
+        nickname.setText("");
+        amount.setText("");
+        width.setText("");
+        height.setText("");
+        depth.setText("");
 
+
+        /**
+         * creating test field
+         */
+        boolean bool = false;
+        float tempC = 0;
+        float tempF = 0;
+
+        Tests Test = new Tests(bool, tempC, tempF);
+
+        FirebaseDatabase.getInstance().getReference("TestsArea")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(Test);
 
 
     }
