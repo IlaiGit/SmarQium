@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1CDEE8"
     android:orientation="vertical"
     tools:context=".Register">
 
@@ -25,18 +26,18 @@
             android:layout_weight="5" />
 
         <TextView
-            android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40"
+            android:fontFamily="@font/aclonica"
             android:gravity="center"
             android:text="SmarQium"
-            android:textColor="#2E3545"
+            android:textColor="#207175"
             android:textSize="34sp"
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/Logo"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="20"

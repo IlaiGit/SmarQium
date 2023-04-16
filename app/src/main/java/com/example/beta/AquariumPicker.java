@@ -1,8 +1,5 @@
 package com.example.beta;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -11,10 +8,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,9 +23,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
+
+/**
+ * @author		Ilai Shimoni <ilaigithub@gmail.com>
+ * @version	    2.2
+ * @since		6/11/22
+ *  this class allows the user to choose one of his registered aquariums and get access to it or create and register a new aquarium
+ */
 
 public class AquariumPicker extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -45,22 +49,8 @@ public class AquariumPicker extends AppCompatActivity implements AdapterView.OnI
     ArrayList<String> aqValues = new ArrayList<String>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_aquarium_picker);
-
-        add = (Button) findViewById(R.id.add);
-        add.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
-
-        lv = (ListView) findViewById(R.id.lv);
-        show_name = (TextView) findViewById(R.id.show_name);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        Aqref = FirebaseDatabase.getInstance().getReference("Aquariums");
-        userID = user.getUid();
-
-        lv.setOnItemClickListener(this);
+    protected void onStart(){
+        super.onStart();
 
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -91,7 +81,7 @@ public class AquariumPicker extends AppCompatActivity implements AdapterView.OnI
                     String ukey = user.getUid();
                     String dat = data.getKey();
 
-                    if(ukey.equals(dat)){
+                    if(dat.contains(ukey)){
                         aqList.add(ukey);
                         Aquarium AQtmp = data.getValue(Aquarium.class);
                         String AQname = AQtmp.NickName;
@@ -115,7 +105,7 @@ public class AquariumPicker extends AppCompatActivity implements AdapterView.OnI
 
 
 
-                }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -123,6 +113,24 @@ public class AquariumPicker extends AppCompatActivity implements AdapterView.OnI
             }
         };
         Aqref.addValueEventListener(AqListener);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_aquarium_picker);
+
+        add = (Button) findViewById(R.id.add);
+        add.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
+
+        lv = (ListView) findViewById(R.id.lv);
+        show_name = (TextView) findViewById(R.id.show_name);
+        lv.setOnItemClickListener(this);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        Aqref = FirebaseDatabase.getInstance().getReference("Aquariums");
+        userID = user.getUid();
     }
 
         public void redirect_logout(View view) {

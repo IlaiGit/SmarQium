@@ -1,5 +1,12 @@
 package com.example.beta;
 
+/**
+ * @author		Ilai Shimoni <ilaigithub@gmail.com>
+ * @version	    2.2
+ * @since		6/11/22
+ *  this class creates an "aquarium" object which stores the data received from the sensors at the database
+ */
+
 public class Aquarium {
 
     public String NickName;

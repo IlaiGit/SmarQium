@@ -1,17 +1,23 @@
 package com.example.beta;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
- * Adding and aquarium and attach it to user
+ * @author		Ilai Shimoni <ilaigithub@gmail.com>
+ * @version	    2.2
+ * @since		6/11/22
+ *  this class provides user the ability to register his aquarium into the software
  */
 
 public class AddAquarium extends AppCompatActivity {
@@ -25,6 +31,7 @@ public class AddAquarium extends AppCompatActivity {
     EditText height;
     EditText depth;
 
+    AlertDialog.Builder adb;
 
 
 
@@ -90,7 +97,7 @@ public class AddAquarium extends AppCompatActivity {
         Aquarium aqq =  new Aquarium(NICKNAME, AMOUNT, WIDTH, HEIGHT, DEPTH);
 
         FirebaseDatabase.getInstance().getReference("Aquariums")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(aqq);
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()+" " +System.currentTimeMillis()).setValue(aqq);
 
         Toast.makeText(this, "your aquarium was created!", Toast.LENGTH_SHORT).show();
         nickname.setText("");
@@ -108,9 +115,46 @@ public class AddAquarium extends AppCompatActivity {
         float tempF = 0;
 
         Tests Test = new Tests(bool, tempC, tempF);
+        FirebaseDatabase.getInstance().getReference("TestsArea").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(Test);
 
-        FirebaseDatabase.getInstance().getReference("TestsArea")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(Test);
+        /**
+         * alert dialog for selecting a profile pic or animation
+         */
+
+        adb = new AlertDialog.Builder(this);
+
+        adb.setTitle("before we continue");
+        adb.setMessage("we would like to create a profile picture for your aquarium, please select any of the options below");
+
+        adb.setPositiveButton("take a picture", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Intent intent = new Intent(AddAquarium.this, storage.class);
+                startActivity(intent);
+
+            }
+        });
+        adb.setNegativeButton("no thanks", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                startActivity(new Intent(AddAquarium.this, AquariumPicker.class));
+
+            }
+        });
+        adb.setNeutralButton("create animation", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Toast.makeText(AddAquarium.this, "create animation", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog ad = adb.create();
+        ad.show();
+
+
+
 
 
     }

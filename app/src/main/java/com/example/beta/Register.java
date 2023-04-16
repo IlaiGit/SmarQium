@@ -1,8 +1,5 @@
 package com.example.beta;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -14,14 +11,24 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
+
+/**
+ * @author		Ilai Shimoni <ilaigithub@gmail.com>
+ * @version	    2.2
+ * @since		6/11/22
+ *  this class provides user with his registration required field and creates an account
+ */
 
 public class Register extends AppCompatActivity {
 
@@ -32,21 +39,35 @@ public class Register extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     ArrayList<String> KIDlist = new ArrayList<String>();
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent intent = getIntent();
+        String RegistryMail = intent.getStringExtra("RegistryMail");
+        String RegistryPassword = intent.getStringExtra("RegistryPassword");
+
+        Email.setText(RegistryMail);
+        Password.setText(RegistryPassword);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        btn = (Button) findViewById(R.id.btn);
+        btn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         prog = (ProgressBar) findViewById(R.id.prog);
-        btn = (Button) findViewById(R.id.btn);
-        btn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
         FirstName = (EditText) findViewById(R.id.FirstName);
         LastName = (EditText) findViewById(R.id.LastName);
         Email = (EditText) findViewById(R.id.Email);
         Password = (EditText) findViewById(R.id.Password);
+
 
     }
 
@@ -101,8 +122,13 @@ public class Register extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
 
                                             if(task.isSuccessful()){
-                                                Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(Register.this, "User has been registered successfully, verify email", Toast.LENGTH_LONG).show();
                                                 prog.setVisibility(View.INVISIBLE);
+
+                                                //send email verification
+                                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                                user.sendEmailVerification();
+                                                Toast.makeText(Register.this, "Verify account through email", Toast.LENGTH_LONG).show();
 
                                                 // redirect
                                                 Intent intent = new Intent(Register.this, Login.class);

@@ -10,4 +10,6 @@
 
     <color name="custom_blue">#2E3545</color>
     <color name="custom_yellow">#FFCA10</color>
+    <color name="custom_cyan">#17B0B8</color>
+    <color name="custom_secondary">#207175</color>
 </resources>

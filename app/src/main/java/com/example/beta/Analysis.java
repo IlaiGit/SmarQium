@@ -1,8 +1,15 @@
 package com.example.beta;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+/**
+ * @author		Ilai Shimoni <ilaigithub@gmail.com>
+ * @version	    2.2
+ * @since		6/11/22
+ *  this class allows user to look at data samples collected during his use of the application and sensors
+ */
 
 public class Analysis extends AppCompatActivity {
 

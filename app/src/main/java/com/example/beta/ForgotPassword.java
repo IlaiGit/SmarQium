@@ -1,8 +1,5 @@
 package com.example.beta;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -14,9 +11,19 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+
+/**
+ * @author		Ilai Shimoni <ilaigithub@gmail.com>
+ * @version	    2.2
+ * @since		6/11/22
+ *  this class allows a user who forgot his password to recover it by authentication through email provided during registration
+ */
 
 public class ForgotPassword extends AppCompatActivity {
     Button RecoveryMail;
@@ -44,7 +51,7 @@ public class ForgotPassword extends AppCompatActivity {
         RecoveryMail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
 
         recovery = (EditText) findViewById(R.id.recovery);
-        Recover_prog = (ProgressBar) findViewById(R.id.Recover_prog);
+        Recover_prog = (ProgressBar) findViewById(R.id.ProgressBar);
 
         firebaseAuth = FirebaseAuth.getInstance();
 

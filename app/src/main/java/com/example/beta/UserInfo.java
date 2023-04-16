@@ -18,4 +18,36 @@ public class UserInfo {
         this.arr = arr;
         this.Uid = Uid;
     }
+
+    public void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
+    }
+
+    public void setArr(ArrayList<String> arr) {
+        this.arr = arr;
+    }
+
+    public void setUid(String uid) {
+        Uid = uid;
+    }
+
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public ArrayList<String> getArr() {
+        return arr;
+    }
+
+    public String getUid() {
+        return Uid;
+    }
 }

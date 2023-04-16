@@ -1,18 +1,19 @@
 package com.example.beta;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,65 +21,58 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
+/**
+ * @author		Ilai Shimoni <ilaigithub@gmail.com>
+ * @version	    2.2
+ * @since		6/11/22
+ *  this class makes sure an account is registered before continuing and shows his data accordingly
+ */
 
 public class Login extends AppCompatActivity {
 
-    Button login, Register, ForgotPassword;
     EditText email, password;
-    ProgressBar progressBar;
+    ProgressBar progress_horizontal;
+    private Boolean saveLogin;
+    private CheckBox saveLoginCheckBox;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
     private FirebaseAuth firebaseAuth;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.password);
-
-        Intent intent = getIntent();
-        String LogMail = intent.getStringExtra("LogMail");
-
-        if(LogMail != null){
-            email.setText(LogMail);
-        }
-        else{
-            String Email = intent.getStringExtra("Email");
-            String Password = intent.getStringExtra("Password");
-
-            email.setText(Email);
-            password.setText(Password);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /**
-         * connecting xml elements to java, setting color of custom buttons
-         */
-
-        progressBar = (ProgressBar) findViewById(R.id.Recover_prog);
-        login = findViewById(R.id.Login);
-        login.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
-
-        Register = findViewById(R.id.Register);
-        Register.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
-
-        ForgotPassword = findViewById(R.id.ForgotPassword);
-        ForgotPassword.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#2E3545")));
+        progress_horizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        saveLoginCheckBox = (CheckBox) findViewById(R.id.checkBox);
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        if (saveLogin == true) {
+            email.setText(loginPreferences.getString("email", ""));
+            password.setText(loginPreferences.getString("password", ""));
+            saveLoginCheckBox.setChecked(true);
+        }
     }
-
+    /**
+     * this function occurs when "Login" Button is pressed
+     * the function checks credentials, if account is verified and if details are correct/account exists and acts accordingly
+     */
     public void SignIn(View view) {
-        String EMAIL = email.getText().toString().trim();
-        String PASSWORD = password.getText().toString().trim();
 
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(email.getWindowToken(), 0);
+
+        String EMAIL = email.getText().toString().trim(); //end spaces not included
+        String PASSWORD = password.getText().toString().trim(); //end spaces not included
+
+        //check validity
         if(EMAIL.isEmpty()){
             email.setError("Email is required!");
             email.requestFocus();
@@ -100,8 +94,18 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        if (saveLoginCheckBox.isChecked()) {
+            loginPrefsEditor.putBoolean("saveLogin", true);
+            loginPrefsEditor.putString("email", EMAIL);
+            loginPrefsEditor.putString("password", PASSWORD);
+            loginPrefsEditor.commit();
+        }
+        else {
+            loginPrefsEditor.clear();
+            loginPrefsEditor.commit();
+        }
 
+        progress_horizontal.setVisibility(View.VISIBLE);
         firebaseAuth.signInWithEmailAndPassword(EMAIL, PASSWORD).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -114,28 +118,40 @@ public class Login extends AppCompatActivity {
                         startActivity(new Intent(Login.this, AquariumPicker.class));
                     }
                     else{
-                        user.sendEmailVerification();
+                        // email exists but not verified yet, user needs to verify through email
                         Toast.makeText(Login.this, "Verify account through email", Toast.LENGTH_LONG).show();
-                        progressBar.setVisibility(View.INVISIBLE);
+                        progress_horizontal.setVisibility(View.INVISIBLE);
                     }
 
                 }
                 else{
                     Toast.makeText(Login.this, "Failed to log in, check credentials", Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progress_horizontal.setVisibility(View.INVISIBLE);
                 }
             }
         });
 
     }
 
-    public void Register(View view) {
-        startActivity(new Intent(this, Register.class));
-    }
-
+    /**
+     * this function occurs when "Forgot Password" Button is pressed
+     * the function redirects user to recovery activity and saves written email if exists
+     */
     public void forgot (View view) {
         Intent intent = new Intent(this, com.example.beta.ForgotPassword.class);
         intent.putExtra("RecMail", email.getText().toString().trim());
         startActivity(intent);
     }
+
+    /**
+     * this function occurs when "Register" Button is pressed
+     * the function redirects user to registry activity and saves credentials
+     */
+    public void Register(View view) {
+        Intent intent = new Intent(this, com.example.beta.Register.class);
+        intent.putExtra("RegistryMail", email.getText().toString().trim());
+        intent.putExtra("RegistryPassword", password.getText().toString().trim());
+        startActivity(intent);
+    }
+
 }

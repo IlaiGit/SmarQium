@@ -2,10 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/remember"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1CDEE8"
     android:orientation="vertical"
     tools:context=".Login">
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="ani"
+        android:text="Button"
+        android:visibility="gone" />
 
     <Space
         android:layout_width="match_parent"
@@ -15,27 +25,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_weight="15"
         android:orientation="horizontal">
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5" />
+            android:layout_weight="3" />
 
         <TextView
-            android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40"
+            android:fontFamily="@font/aclonica"
             android:gravity="center"
             android:text="SmarQium"
-            android:textColor="#2E3545"
+            android:textColor="#207175"
             android:textSize="34sp"
             android:textStyle="bold" />
 
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
         <ImageView
-            android:id="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="20"
@@ -44,13 +58,13 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5" />
+            android:layout_weight="3" />
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5" />
+        android:layout_weight="2" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,12 +86,13 @@
             android:drawableLeft="@drawable/ic_baseline_account_circle_24"
             android:drawablePadding="15dp"
             android:ems="10"
-            android:hint='Email:'
+            android:fontFamily="@font/playfair_display"
 
+            android:hint='Email:'
             android:inputType="textEmailAddress"
             android:paddingLeft="10dp"
-            android:textColorHint="@color/custom_blue"
-            android:textCursorDrawable="@drawable/text_cursor"
+            android:textColorHint="#207175"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <Space
@@ -111,12 +126,13 @@
             android:drawableLeft="@drawable/ic_baseline_password_24"
             android:drawablePadding="15dp"
             android:ems="10"
-            android:hint="Password:"
+            android:fontFamily="@font/playfair_display"
 
+            android:hint="Password:"
             android:inputType="textPassword"
             android:paddingLeft="10dp"
-            android:textColorHint="@color/custom_blue"
-            android:textCursorDrawable="@drawable/text_cursor"
+            android:textColorHint="#207175"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <Space
@@ -124,11 +140,6 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5" />
     </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -141,17 +152,29 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:fontFamily="@font/playfair_display"
+            android:text="Remember me"
+            android:textStyle="bold" />
+
         <ProgressBar
-            android:id="@+id/Recover_prog"
+
+            android:id="@+id/progress_horizontal"
+
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:visibility="invisible"
-
             android:indeterminate="true"
+
+            android:indeterminateTint="@color/custom_yellow"
             android:indeterminateTintMode="src_atop"
-            android:indeterminateTint="@color/custom_yellow"/>
+            android:visibility="invisible" />
 
         <Space
             android:layout_width="0dp"
@@ -162,42 +185,38 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="2" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_weight="12"
         android:orientation="horizontal">
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="10" />
+            android:layout_weight="7" />
 
-        <Button
+        <ImageButton
             android:id="@+id/Login"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="70"
-            android:background="@drawable/circle"
-            android:fontFamily="casual"
-            android:onClick="SignIn"
-            android:text="Log In"
-            android:textAllCaps="false"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_weight="25"
+            android:background="@drawable/login"
+            android:onClick="SignIn" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="10" />
+            android:layout_weight="7" />
+
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5" />
+        android:layout_weight="2" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -210,42 +229,41 @@
             android:layout_height="match_parent"
             android:layout_weight="5" />
 
-        <Button
+
+        <ImageButton
             android:id="@+id/ForgotPassword"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:background="@drawable/circle"
-            android:fontFamily="casual"
-            android:onClick="forgot"
-            android:text="Forgot Password?"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            android:layout_weight="40"
+            android:background="@drawable/forgot_password"
+            android:onClick="forgot" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5" />
 
-        <Button
+        <ImageButton
             android:id="@+id/Register"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="35"
-            android:background="@drawable/circle"
-            android:fontFamily="casual"
-            android:onClick="Register"
-            android:text="Register"
-            android:textSize="16sp" />
+            android:background="@drawable/register"
+            android:onClick="Register" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5" />
+
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

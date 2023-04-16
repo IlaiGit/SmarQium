@@ -13,4 +13,28 @@ public class Tests {
 
     public Tests() {
     }
+
+    public boolean isIndicator() {
+        return indicator;
+    }
+
+    public void setIndicator(boolean indicator) {
+        this.indicator = indicator;
+    }
+
+    public float getTempC() {
+        return tempC;
+    }
+
+    public void setTempC(float tempC) {
+        this.tempC = tempC;
+    }
+
+    public float getTempF() {
+        return tempF;
+    }
+
+    public void setTempF(float tempF) {
+        this.tempF = tempF;
+    }
 }
