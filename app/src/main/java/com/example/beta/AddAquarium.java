@@ -1,8 +1,12 @@
 package com.example.beta;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 
 /**
  * @author		Ilai Shimoni <ilaigithub@gmail.com>
@@ -30,9 +40,47 @@ public class AddAquarium extends AppCompatActivity {
     EditText width;
     EditText height;
     EditText depth;
-
+    BroadcastReceiver broadcastReceiver;
     AlertDialog.Builder adb;
+    String MAC;
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        adb = new AlertDialog.Builder(this);
+
+        adb.setTitle("Enter your mac address");
+        adb.setMessage("please enter the device's id found on your box");
+        final EditText eT = new EditText(this);
+        adb.setView(eT);
+        adb.setCancelable(false);
+        adb.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if(eT.getText().toString().isEmpty()){
+                    Intent intent = new Intent(AddAquarium.this, AquariumPicker.class);
+                    startActivity(intent);
+                }
+                else{
+                    MAC = eT.getText().toString();
+                    dialogInterface.dismiss();
+                }
+
+            }
+        });
+        adb.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(AddAquarium.this, AquariumPicker.class);
+                startActivity(intent);
+            }
+        });
+        AlertDialog ad = adb.create();
+        ad.show();
+    }
 
 
     @Override
@@ -52,11 +100,37 @@ public class AddAquarium extends AppCompatActivity {
 
     }
 
+    protected void unregisterNetwork(){
+        try {
+            unregisterReceiver(broadcastReceiver);
+
+        }
+        catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterNetwork();
+    }
+
+    protected void registerNetworkBrodcastReciever(){
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
     public void ConnectAndCreate(View view) {
 
-        /**
-         * check for errors
-         */
+        //check internet connection before proceeding
+        broadcastReceiver = new NetworkConnectionReciever();
+        registerNetworkBrodcastReciever();
 
         if(nickname.getText().toString().isEmpty()){
             nickname.setError("Please enter a nickname");
@@ -64,7 +138,7 @@ public class AddAquarium extends AppCompatActivity {
             return;
         }
         if(amount.getText().toString().isEmpty()){
-            amount.setError("please enter the amount if fish");
+            amount.setError("please enter the amount of fish");
             amount.requestFocus();
             return;
         }
@@ -74,12 +148,12 @@ public class AddAquarium extends AppCompatActivity {
             return;
         }
         if(height.getText().toString().isEmpty()){
-            height.setError("please enter Aquarium's width");
+            height.setError("please enter Aquarium's height");
             height.requestFocus();
             return;
         }
         if(depth.getText().toString().isEmpty()){
-            depth.setError("please enter Aquarium's width");
+            depth.setError("please enter Aquarium's depth");
             depth.requestFocus();
             return;
         }
@@ -89,15 +163,23 @@ public class AddAquarium extends AppCompatActivity {
         String WIDTH = width.getText().toString();
         String HEIGHT = height.getText().toString();
         String DEPTH = depth.getText().toString();
+        // String Mac is asked for already
+
+        //get date
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDate = dateFormat.format(date);
+
+
 
 
         /**
          * Upload data to firebase
          */
-        Aquarium aqq =  new Aquarium(NICKNAME, AMOUNT, WIDTH, HEIGHT, DEPTH);
+        Aquarium aqq =  new Aquarium(NICKNAME, AMOUNT, WIDTH, HEIGHT, DEPTH, MAC);
 
         FirebaseDatabase.getInstance().getReference("Aquariums")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()+" " +System.currentTimeMillis()).setValue(aqq);
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()+ " " + MAC).setValue(aqq);
 
         Toast.makeText(this, "your aquarium was created!", Toast.LENGTH_SHORT).show();
         nickname.setText("");
@@ -111,50 +193,19 @@ public class AddAquarium extends AppCompatActivity {
          * creating test field
          */
         boolean bool = false;
-        float tempC = 0;
-        float tempF = 0;
-
-        Tests Test = new Tests(bool, tempC, tempF);
-        FirebaseDatabase.getInstance().getReference("TestsArea").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(Test);
-
-        /**
-         * alert dialog for selecting a profile pic or animation
-         */
-
-        adb = new AlertDialog.Builder(this);
-
-        adb.setTitle("before we continue");
-        adb.setMessage("we would like to create a profile picture for your aquarium, please select any of the options below");
-
-        adb.setPositiveButton("take a picture", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                Intent intent = new Intent(AddAquarium.this, storage.class);
-                startActivity(intent);
-
-            }
-        });
-        adb.setNegativeButton("no thanks", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                startActivity(new Intent(AddAquarium.this, AquariumPicker.class));
-
-            }
-        });
-        adb.setNeutralButton("create animation", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                Toast.makeText(AddAquarium.this, "create animation", Toast.LENGTH_SHORT).show();
-            }
-        });
-        AlertDialog ad = adb.create();
-        ad.show();
+        double tempC = 0;
+        double tempF = 0;
+        double WaterClarity = 0;
+        double WaterHeight = 0;
+        double WaterOpacity = 0;
+        boolean ActivateFeeder = false;
 
 
+        Tests Test = new Tests(bool, tempC, tempF, WaterClarity, WaterHeight, WaterOpacity, ActivateFeeder);
+        FirebaseDatabase.getInstance().getReference("TestsArea").child(FirebaseAuth.getInstance().getCurrentUser().getUid()+  " " +System.currentTimeMillis() + " " + MAC).setValue(Test);
 
+        Intent intent = new Intent(AddAquarium.this, AquariumPicker.class);
+        startActivity(intent);
 
 
     }

@@ -1,8 +1,15 @@
 package com.example.beta;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -13,12 +20,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -35,9 +44,9 @@ public class Register extends AppCompatActivity {
     Button btn;
     EditText FirstName, LastName, Email, Password;
     ProgressBar prog;
-
     private FirebaseAuth firebaseAuth;
-    ArrayList<String> KIDlist = new ArrayList<String>();
+    BroadcastReceiver broadcastReceiver;
+
 
     @Override
     protected void onStart() {
@@ -68,10 +77,40 @@ public class Register extends AppCompatActivity {
         Email = (EditText) findViewById(R.id.Email);
         Password = (EditText) findViewById(R.id.Password);
 
-
     }
 
+
+    protected void unregisterNetwork(){
+        try {
+            unregisterReceiver(broadcastReceiver);
+
+        }
+        catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterNetwork();
+    }
+
+    protected void registerNetworkBrodcastReciever(){
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
     public void CreateAccount(View view) {
+
+        //check internet connection before proceeding
+        broadcastReceiver = new NetworkConnectionReciever();
+        registerNetworkBrodcastReciever();
+
         String firstName = FirstName.getText().toString().trim();
         if(firstName.isEmpty()){
             FirstName.setError("Please enter your first name!");
@@ -113,22 +152,36 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            UserInfo user = new UserInfo(firstName, lastName, KIDlist , FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            UserInfo user = new UserInfo(firstName, lastName,email, password, FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user)
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference UserRef = database.getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            UserRef.setValue(user)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 
                                             if(task.isSuccessful()){
-                                                Toast.makeText(Register.this, "User has been registered successfully, verify email", Toast.LENGTH_LONG).show();
                                                 prog.setVisibility(View.INVISIBLE);
 
-                                                //send email verification
+                                                //send email verification + app notification
                                                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                                 user.sendEmailVerification();
-                                                Toast.makeText(Register.this, "Verify account through email", Toast.LENGTH_LONG).show();
+                                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                                                    NotificationChannel channel = new NotificationChannel("EmailVerify", "Email verification", NotificationManager.IMPORTANCE_DEFAULT);
+                                                    NotificationManager manager = getSystemService(NotificationManager.class);
+                                                    manager.createNotificationChannel(channel);
+                                                }
+
+                                                NotificationCompat.Builder builder = new NotificationCompat.Builder(Register.this, "EmailVerify");
+                                                builder.setContentTitle("Smarqium");
+                                                builder.setContentText("Please check your email to verify it ! ");
+                                                builder.setSmallIcon(R.drawable.ic_noti_icon);
+                                                builder.setAutoCancel(true);
+
+                                                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                                mNotificationManager.notify(1, builder.build());
+
 
                                                 // redirect
                                                 Intent intent = new Intent(Register.this, Login.class);

@@ -1,11 +1,14 @@
 package com.example.beta;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -30,11 +33,12 @@ public class storage extends AppCompatActivity {
     ProgressDialog progressDialog;
 
 
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage);
+
         img = (ImageView) findViewById(R.id.imageView);
     }
 
@@ -54,7 +58,6 @@ public class storage extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             mImageUri = data.getData();
-
             Picasso.with(this).load(mImageUri).into(img);
         }
     }
@@ -69,7 +72,7 @@ public class storage extends AppCompatActivity {
     public void uploadImage(View view) {
 
         if(img.getDrawable() == null){
-            Toast.makeText(this, "please select and image before proceeding", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "please select an image before proceeding", Toast.LENGTH_SHORT).show();
         }
         else{
 

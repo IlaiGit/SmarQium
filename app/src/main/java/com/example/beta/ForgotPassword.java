@@ -1,8 +1,12 @@
 package com.example.beta;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -13,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -75,7 +80,20 @@ public class ForgotPassword extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(ForgotPassword.this, "Email sent to chnage password", Toast.LENGTH_LONG).show();
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        NotificationChannel channel = new NotificationChannel("EmailRecovery", "Email recovery", NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager manager = getSystemService(NotificationManager.class);
+                        manager.createNotificationChannel(channel);
+                    }
+
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(ForgotPassword.this, "EmailRecovery");
+                    builder.setContentTitle("Smarqium");
+                    builder.setContentText("Please check your email and change your password ! ");
+                    builder.setSmallIcon(R.drawable.ic_noti_icon);
+                    builder.setAutoCancel(true);
+
+                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.notify(1, builder.build());
                     Intent intent = new Intent(ForgotPassword.this, Login.class);
                     intent.putExtra("LogMail", recovery.getText().toString());
                     startActivity(intent);

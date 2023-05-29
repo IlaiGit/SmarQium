@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Beta</string>
+    <string name="title_activity_no_connection">noConnection</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <string-array name="listOfSensors">
+        <item>Clarity</item>
+        <item>Height</item>
+        <item>Opacity</item>
+
+    </string-array>
 </resources>

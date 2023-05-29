@@ -8,63 +8,125 @@
     android:orientation="vertical"
     tools:context=".Analysis">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/aclonica"
+            android:gravity="center"
+            android:text="Delete aquarium"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="DeleteAq"
+            android:src="@drawable/ic_delete" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_graph"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_feeder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnGraph"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:onClick="ReplaceGraph"
+            android:scaleType="centerInside"
+            android:src="@drawable/graph" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnError"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:onClick="ReplaceError"
+            android:scaleType="centerInside"
+            android:src="@drawable/excal_mark" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnFeeder"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:onClick="ReplaceFeeder"
+            android:scaleType="centerInside"
+            android:src="@drawable/feeder" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:fontFamily="@font/playfair_display"
-        android:gravity="center"
-        android:text="Last Sample Recieved:"
-        android:textColor="@color/custom_blue"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:fontFamily="@font/playfair_display"
-        android:gravity="center"
-        android:text="Temperature:"
-        android:textColor="@color/custom_blue"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:fontFamily="@font/playfair_display"
-        android:gravity="center"
-        android:text="Water Clarity:"
-        android:textColor="@color/custom_blue"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:fontFamily="@font/playfair_display"
-        android:gravity="center"
-        android:text="PDH:"
-        android:textColor="@color/custom_blue"
-        android:textSize="20sp" />
-
-    <com.jjoe64.graphview.helper.GraphViewXML
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="50"
-        app:seriesColor="#ee0000"
-        app:seriesData="0=5;2=5;3=0;4=2"
-        app:seriesType="line" />
+        android:layout_height="match_parent"
+        android:layout_weight="3.2" />
 
 </LinearLayout>

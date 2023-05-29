@@ -15,15 +15,18 @@ public class Aquarium {
     public String AQheight;
     public String AQdepth;
 
+    public String MAC;
+
     public Aquarium(){
     }
 
-    public Aquarium(String NickName, String FishAmount, String AQwidth, String AQheight, String AQdepth){
+    public Aquarium(String NickName, String FishAmount, String AQwidth, String AQheight, String AQdepth, String MAC){
         this.NickName = NickName;
         this.FishAmount = FishAmount;
         this.AQwidth = AQwidth;
         this.AQheight = AQheight;
         this.AQdepth = AQdepth;
+        this.MAC = MAC;
     }
 
 }

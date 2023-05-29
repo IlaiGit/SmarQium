@@ -30,6 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40"
+            android:fontFamily="@font/aclonica"
             android:gravity="center"
             android:text="SmarQium"
             android:textColor="#2E3545"
@@ -50,22 +51,53 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/show_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="Hello:"
-        android:textColor="@color/custom_blue"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_weight="1.5"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#1CDEE8"
+            android:cropToPadding="false"
+            android:onClick="ChoosePic"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_account_circle_24" />
+
+        <TextView
+            android:id="@+id/show_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:fontFamily="@font/aclonica"
+            android:gravity="center|left"
+            android:text="Hello:"
+            android:textColor="@color/custom_blue"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/show_name2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:fontFamily="@font/aclonica"
         android:gravity="center"
         android:text="My Connected Devices:"
         android:textColor="@color/custom_blue"
@@ -77,11 +109,29 @@
         android:layout_height="0dp"
         android:layout_weight="0.5" />
 
-    <ListView
-        android:id="@+id/lv"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3" />
+        android:layout_weight="3"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
