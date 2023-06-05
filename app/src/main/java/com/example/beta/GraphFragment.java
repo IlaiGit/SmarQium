@@ -41,7 +41,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this fragment pulls data from the received data at the database and fills it into a graph
+ */
 public class GraphFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     Spinner spinner;
@@ -75,6 +80,12 @@ public class GraphFragment extends Fragment implements AdapterView.OnItemSelecte
         super.onCreate(savedInstanceState);
 
     }
+
+
+    /**
+     * this method operates a data pull for all data related to the current user, according to the data fills
+     * a graph which shows the user the last 10 results of his samples
+     */
 
     @Override
     public void onStart() {
@@ -130,6 +141,10 @@ public class GraphFragment extends Fragment implements AdapterView.OnItemSelecte
         return inflater.inflate(R.layout.fragment_graph, container, false);
     }
 
+    /**
+     * depends on the user's choice for the data pull, class method shows the relevant data, clearing earlier usage
+     */
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -160,8 +175,8 @@ public class GraphFragment extends Fragment implements AdapterView.OnItemSelecte
 
             });
 
-            graphView.addSeries(series);
 
+            graphView.addSeries(series);
 
         } else if (position == 2) {
             graphView.removeAllSeries();

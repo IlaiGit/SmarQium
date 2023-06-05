@@ -30,13 +30,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 
 /**
- * @author		Ilai Shimoni <ilaigithub@gmail.com>
- * @version	    2.2
- * @since		6/11/22
- *  this class provides user with his registration required field and creates an account
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class is responsible for user creation and its upload to the database
+ * includes data check and comparison to existing data on the database
  */
 
 public class Register extends AppCompatActivity {
@@ -105,11 +105,17 @@ public class Register extends AppCompatActivity {
             registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
     }
-    public void CreateAccount(View view) {
 
-        //check internet connection before proceeding
+    /**
+     * happens at a register user button press
+     * @return	a created user saved to database
+     */
+
+    public void CreateAccount(View view) {
         broadcastReceiver = new NetworkConnectionReciever();
         registerNetworkBrodcastReciever();
+
+
 
         String firstName = FirstName.getText().toString().trim();
         if(firstName.isEmpty()){

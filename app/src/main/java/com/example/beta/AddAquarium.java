@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,17 +28,14 @@ import java.text.SimpleDateFormat;
 
 
 /**
- * @author		Ilai Shimoni <ilaigithub@gmail.com>
- * @version	    2.2
- * @since		6/11/22
- *  this class provides user the ability to register his aquarium into the software
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class allows user to connect an aquarium to the account
+ * creates the aquarium using the Aquarium class as well as creating a test field
  */
-
 public class AddAquarium extends AppCompatActivity {
 
-    /**
-     * xml variables definition
-     */
     EditText nickname;
     EditText amount;
     EditText width;
@@ -45,6 +46,11 @@ public class AddAquarium extends AppCompatActivity {
     String MAC;
 
 
+
+
+    /**
+     * and alert dialog shows on the screen, this step is required on a creation of a new aquarium
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -126,6 +132,11 @@ public class AddAquarium extends AppCompatActivity {
         }
     }
 
+    /**
+     * this method check for empty text field and creates
+     * 1. new aquarium
+     * 2. a test field related to this aquarium
+     */
     public void ConnectAndCreate(View view) {
 
         //check internet connection before proceeding
@@ -204,8 +215,18 @@ public class AddAquarium extends AppCompatActivity {
         Tests Test = new Tests(bool, tempC, tempF, WaterClarity, WaterHeight, WaterOpacity, ActivateFeeder);
         FirebaseDatabase.getInstance().getReference("TestsArea").child(FirebaseAuth.getInstance().getCurrentUser().getUid()+  " " +System.currentTimeMillis() + " " + MAC).setValue(Test);
 
-        Intent intent = new Intent(AddAquarium.this, AquariumPicker.class);
-        startActivity(intent);
+        /**
+         * run background operation
+         */
+
+        Intent intent = new Intent(AddAquarium.this, TestService.class);
+        intent.putExtra("MAC", MAC);
+        startService(intent);
+
+        Intent goback = new Intent(AddAquarium.this, AquariumPicker.class);
+        startActivity(goback);
+
+
 
 
     }

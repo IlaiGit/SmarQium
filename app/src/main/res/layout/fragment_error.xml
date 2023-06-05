@@ -29,7 +29,18 @@
         android:layout_weight="1"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:onClick="ClaritySolution"
         android:text="No detected problems (Water Clarity)" />
+
+    <Button
+        android:id="@+id/clarityBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="monospace"
+        android:text="Click For more Info"
+        android:textColor="#000000"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/TV_height"
@@ -38,7 +49,18 @@
         android:layout_weight="1"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:onClick="HeightSolution"
         android:text="No detected problems (Water Height)" />
+
+    <Button
+        android:id="@+id/heightBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="monospace"
+        android:text="Click For more Info"
+        android:textColor="#000000"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/TV_PH"
@@ -47,7 +69,18 @@
         android:layout_weight="1"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:onClick="PhSolution"
         android:text="No detected problems (Water PH)" />
+
+    <Button
+        android:id="@+id/phBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="monospace"
+        android:text="Click For more Info"
+        android:textColor="#000000"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/TV_temperature"
@@ -56,52 +89,58 @@
         android:layout_weight="1"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:onClick="TempSolution"
         android:text="No detected problems (Water temperature)" />
 
+    <Button
+        android:id="@+id/tempBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="monospace"
+        android:text="Click For more Info"
+        android:textColor="#000000"
+        android:visibility="gone" />
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5" />
 
-    <HorizontalScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
-        android:fillViewport="true" >
+        android:layout_weight="6"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <WebView
+            android:id="@+id/clarityWEB"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:visibility="gone" />
 
-            <WebView
-                android:id="@+id/clarityWEB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
+        <WebView
+            android:id="@+id/heightWEB"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
-            <WebView
-                android:id="@+id/heightWEB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
+        <WebView
+            android:id="@+id/phWEB"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
-            <WebView
-                android:id="@+id/opacityWEB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
-
-            <WebView
-                android:id="@+id/temperatureWEB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
-        </LinearLayout>
-    </HorizontalScrollView>
+        <WebView
+            android:id="@+id/temperatureWEB"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5" />
+
 </LinearLayout>

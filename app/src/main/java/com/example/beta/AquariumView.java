@@ -13,13 +13,16 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author		Ilai Shimoni <ilaigithub@gmail.com>
- * @version	    2.2
- * @since		6/11/22
- *  this class receives information given by the user and animates his aquarium
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class creates animation of the aquarium
  */
-
 public class AquariumView extends View {
+
+    /**
+     * creating the object's attributes
+     */
 
     private int mAquariumWidth;
     private int mAquariumHeight;

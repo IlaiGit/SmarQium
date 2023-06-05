@@ -11,10 +11,20 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
-
+/**
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class provides the service for checking the internet connection of the user
+ * and disables options that require internet connection and will cause problems
+ */
 public class NetworkConnectionReciever extends BroadcastReceiver {
 
     AlertDialog.Builder adb;
+
+    /**
+     * check internet connection and proceed with the according message
+     */
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -51,6 +61,14 @@ public class NetworkConnectionReciever extends BroadcastReceiver {
         }
 
     }
+
+    /**
+     * the method checks internet connection
+     *
+     * the method is called on the class and check for the user's connection to the internet
+     * @return	boolean value depends on internet connection
+     */
+
     public static boolean isNetworkAvailable(Context context) {
         if(context == null)  return false;
 

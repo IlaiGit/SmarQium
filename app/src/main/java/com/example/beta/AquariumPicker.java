@@ -51,14 +51,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * @author		Ilai Shimoni <ilaigithub@gmail.com>
- * @version	    2.2
- * @since		6/11/22
- *  this class allows the user to choose one of his registered aquariums and get access to it or create and register a new aquarium
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class shows the user's connected aquariums
  */
-
 public class AquariumPicker extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    /**
+     * xml elements declaration as well as java local variables
+     */
     TextView show_name;
     Button add;
     ListView lv;
@@ -116,6 +118,10 @@ public class AquariumPicker extends AppCompatActivity implements AdapterView.OnI
             registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
     }
+
+    /**
+     * this method shows all aquariums found on the database that belong to the user
+     */
 
     @Override
     protected void onStart(){
@@ -188,7 +194,10 @@ public class AquariumPicker extends AppCompatActivity implements AdapterView.OnI
         };
         Aqref.addValueEventListener(AqListener);
 
-        // loads profile picture from storage
+        /**
+         * this method loads the user's profile picture from the database and shows it
+         */
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference("images/").child(userID);
 

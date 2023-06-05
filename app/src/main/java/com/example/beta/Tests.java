@@ -1,5 +1,10 @@
 package com.example.beta;
-
+/**
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class consists of Test object which is uploaded to the database empty and is filled with data
+ */
 public class Tests {
     public boolean indicator;
     public double tempC;

@@ -31,10 +31,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * @author		Ilai Shimoni <ilaigithub@gmail.com>
- * @version	    2.2
- * @since		6/11/22
- *  this class makes sure an account is registered before continuing and shows his data accordingly
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class provides user connection process according tp the data on the firebase
  */
 
 public class Login extends AppCompatActivity {
@@ -88,6 +88,10 @@ public class Login extends AppCompatActivity {
         super.onDestroy();
         unregisterNetwork();
     }
+
+    /**
+     * receives the last value of remember me button and fills the user data accordingly
+     */
 
     @Override
     protected void onStart() {

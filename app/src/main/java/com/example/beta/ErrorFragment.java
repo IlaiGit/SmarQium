@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,8 +23,18 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-
+/**
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class pulls data from the firebase, compares it to the
+ * acceptable values and acts accordingly
+ */
 public class ErrorFragment extends Fragment {
+
+    /**
+     * xml elements declaration as well as java local variables
+     */
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
@@ -34,14 +45,13 @@ public class ErrorFragment extends Fragment {
     ArrayList<Double> heightList = new ArrayList<Double>();
     int numberOfTests;
 
+    Button clarityBTN, phBTN, tempBTN, heightBTN;
     TextView TV_clarity, TV_height, TV_opacity, TV_temperature;
-
     public static final double idealTemp_c = 26.0;
     public static final double ideal_water_clarity = 3;
     public static final double ideal_water_height = 60;
     public static final double ideal_water_PH = 3;
-
-    WebView clarityWEB, heightWEB, opacityWEB, temperatureWEB;
+    WebView clarityWEB, heightWEB, phWEB, temperatureWEB;
 
 
 
@@ -59,8 +69,13 @@ public class ErrorFragment extends Fragment {
 
         clarityWEB = (WebView) getView().findViewById(R.id.clarityWEB);
         heightWEB = (WebView) getView().findViewById(R.id.heightWEB);
-        opacityWEB = (WebView) getView().findViewById(R.id.opacityWEB);
+        phWEB = (WebView) getView().findViewById(R.id.phWEB);
         temperatureWEB = (WebView) getView().findViewById(R.id.temperatureWEB);
+
+        clarityBTN = (Button) getView().findViewById(R.id.clarityBTN);
+        phBTN = (Button) getView().findViewById(R.id.phBTN);
+        tempBTN = (Button) getView().findViewById(R.id.tempBTN);
+        heightBTN = (Button) getView().findViewById(R.id.heightBTN);
 
     }
 
@@ -76,6 +91,12 @@ public class ErrorFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_error, container, false);
     }
+
+    /**
+     * this method performs a data pull and according to constants
+     * compares received data and the constants to warn user of
+     * unusual results as well as showing ways to improve
+     */
 
     @Override
     public void onStart() {
@@ -117,31 +138,29 @@ public class ErrorFragment extends Fragment {
 
                 for (int i=0; i<numberOfTests; i++){
                     if(tempCList.get(i) > idealTemp_c){
+                        tempBTN.setVisibility(View.VISIBLE);
                         TV_temperature.setText("A problem with your temperature was detected");
-
-                        temperatureWEB.loadUrl("https://www.thesprucepets.com/how-do-i-lower-high-water-temps-1378741");
-                        temperatureWEB.setVisibility(View.VISIBLE);
-
-                        clarityWEB.loadUrl("https://www.thesprucepets.com/cloudy-aquarium-water-1378803");
-                        clarityWEB.setVisibility(View.VISIBLE);
                     }
                 }
 
                 for (int i=0; i<numberOfTests; i++){
                     if(clarityList.get(i) > ideal_water_clarity){
+                        clarityBTN.setVisibility(View.VISIBLE);
                         TV_clarity.setText("A problem with your water clarity");
 
                     }
                 }
                 for (int i=0; i<numberOfTests; i++){
+                    heightBTN.setVisibility(View.VISIBLE);
                     if(heightList.get(i) > ideal_water_height){
                         TV_height.setText("A problem with your water height");
 
                     }
                 }
                 for (int i=0; i<numberOfTests; i++){
+                    phBTN.setVisibility(View.VISIBLE);
                     if(PHList.get(i) > ideal_water_PH){
-                        TV_opacity.setText("A problem with your water height");
+                        TV_height.setText("A problem with your water height");
 
                     }
                 }
@@ -164,5 +183,47 @@ public class ErrorFragment extends Fragment {
 
 
 
+    }
+    public void TempSolution(View view) {
+
+        phWEB.setVisibility(View.GONE);
+        heightWEB.setVisibility(View.GONE);
+        clarityWEB.setVisibility(View.GONE);
+
+        temperatureWEB.loadUrl("https://www.thesprucepets.com/how-do-i-lower-high-water-temps-1378741");
+        temperatureWEB.setVisibility(View.VISIBLE);
+    }
+
+    public void PhSolution(View view) {
+
+        temperatureWEB.setVisibility(View.GONE);
+        heightWEB.setVisibility(View.GONE);
+        clarityWEB.setVisibility(View.GONE);
+
+
+        phWEB.loadUrl("https://atlas-scientific.com/blog/how-to-lower-ph-in-freshwater-aquarium/#:~:text=The%20preferred%20way%20to%20lower,osmosis%20are%20also%20commonly%20used.");
+        phWEB.setVisibility(View.VISIBLE);
+    }
+
+    public void HeightSolution(View view) {
+
+        temperatureWEB.setVisibility(View.GONE);
+        phWEB.setVisibility(View.GONE);
+        clarityWEB.setVisibility(View.GONE);
+
+        heightWEB.loadUrl("https://blog.aquaticwarehouse.com/water-level-in-fish-tank/#:~:text=You%20should%20generally%20fill%20the,splash%20outside%20of%20the%20tank.&text=Jumping%20behavior%20isn't%20unusual%20among%20aquarium%20species.");
+        heightWEB.setVisibility(View.VISIBLE);
+
+    }
+
+    public void ClaritySolution(View view) {
+
+        temperatureWEB.setVisibility(View.GONE);
+        phWEB.setVisibility(View.GONE);
+        heightWEB.setVisibility(View.GONE);
+
+
+        clarityWEB.loadUrl("https://www.thesprucepets.com/cloudy-aquarium-water-1378803");
+        clarityWEB.setVisibility(View.VISIBLE);
     }
 }

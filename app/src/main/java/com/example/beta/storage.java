@@ -24,7 +24,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-
+/**
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class performs the action of uploading a profile picture for the
+ * user to the database
+ */
 public class storage extends AppCompatActivity {
     ImageView img;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -43,7 +49,7 @@ public class storage extends AppCompatActivity {
     }
 
     /**
-     *
+     * opens the gallery upon "select image" button click
      */
     public void SelectImage(View view) {
         Intent intent = new Intent();
@@ -52,6 +58,9 @@ public class storage extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    /**
+     * loads the image selected from the gallery
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -62,13 +71,17 @@ public class storage extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * opens the camera
+     */
     public void takepicture(View view) {
         Intent open_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
      startActivityForResult(open_camera, 100);
     }
 
-
+    /**
+     * upload the image found on the preview and assign it to the current user
+     */
     public void uploadImage(View view) {
 
         if(img.getDrawable() == null){

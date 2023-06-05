@@ -28,13 +28,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 /**
- * @author		Ilai Shimoni <ilaigithub@gmail.com>
- * @version	    2.2
- * @since		6/11/22
- *  this class allows user to look at data samples collected during his use of the application and sensors
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class shows the user summary of his results and allows to delete
+ * an exising aquarium
  */
-
 public class Analysis extends AppCompatActivity {
+
+    /**
+     * xml elements declaration as well as java local variables
+     */
 
     FragmentContainerView fragment_graph, fragment_error, fragment_feeder;
     private DatabaseReference aq_ref, test_ref;
@@ -61,6 +65,11 @@ public class Analysis extends AppCompatActivity {
 
     }
 
+    /**
+     * performs a FragmentView switch according to the user's button press
+     * while staying on the same activity
+     */
+
     public void ReplaceGraph(View view) {
         fragment_error.setVisibility(View.GONE);
         fragment_feeder.setVisibility(View.GONE);
@@ -74,6 +83,11 @@ public class Analysis extends AppCompatActivity {
                 .commit();
 
     }
+
+    /**
+     * performs a FragmentView switch according to the user's button press
+     * while staying on the same activity
+     */
     public void ReplaceError(View view) {
         fragment_graph.setVisibility(View.GONE);
         fragment_feeder.setVisibility(View.GONE);
@@ -87,10 +101,14 @@ public class Analysis extends AppCompatActivity {
                 .commit();
 
     }
+    /**
+     * performs a FragmentView switch according to the user's button press
+     * while staying on the same activity
+     */
     public void ReplaceFeeder(View view) {
         fragment_graph.setVisibility(View.GONE);
-        fragment_feeder.setVisibility(View.GONE);
-        fragment_error.setVisibility(View.VISIBLE);
+        fragment_error.setVisibility(View.GONE);
+        fragment_feeder.setVisibility(View.VISIBLE);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
@@ -101,6 +119,9 @@ public class Analysis extends AppCompatActivity {
 
     }
 
+    /**
+     * this method deletes an existing aquarium belongs to the user and all data samples that are related to it
+     */
     public void DeleteAq(View view) {
         adb = new AlertDialog.Builder(this);
 
@@ -123,8 +144,10 @@ public class Analysis extends AppCompatActivity {
                     aq_ref = FirebaseDatabase.getInstance().getReference("Aquariums").child(FirebaseAuth.getInstance().getCurrentUser().getUid()+ " " + MAC);
                     aq_ref.removeValue();
 
+                    //cancels background task
+                    stopService(new Intent(getApplication(), TestService.class));
+
                     //remove tests area/s
-                    // set user name at start
                     user = FirebaseAuth.getInstance().getCurrentUser();
                     userID = user.getUid();
                     reference = FirebaseDatabase.getInstance().getReference("TestsArea");
@@ -138,7 +161,7 @@ public class Analysis extends AppCompatActivity {
                                 Tests testTmp = dataSnapshot.getValue(Tests.class);
 
                                 String[] partsOfId = dataSnapshot.getKey().split(" ");
-                                if (MAC.equals(partsOfId[partsOfId.length])) {
+                                if (MAC.equals(partsOfId[2])) {
                                     reference.child(dataSnapshot.getKey()).removeValue();
                                 }
                             }

@@ -24,12 +24,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * @author		Ilai Shimoni <ilaigithub@gmail.com>
- * @version	    2.2
- * @since		6/11/22
- *  this class allows a user who forgot his password to recover it by authentication through email provided during registration
+ * @author		Ilai Shimoni ilaigithub@gmail.com
+ * @version	    3.0
+ * @since		12/10/22
+ * this class provides user with the option to recover or the his user's
+ * password through email
  */
-
 public class ForgotPassword extends AppCompatActivity {
     Button RecoveryMail;
     EditText recovery;
@@ -62,6 +62,11 @@ public class ForgotPassword extends AppCompatActivity {
 
 
     }
+
+    /**
+     * method receives an email path, checks existence in the database and
+     * sends an email accordingly allows the user to rest user's passowrd
+     */
 
     public void recover(View view) {
         String email = recovery.getText().toString().trim();
